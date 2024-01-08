@@ -1,20 +1,24 @@
-import Head from "next/head";
+import { getPostInfo } from "@/app/libs/getPostInfo";
 
-const getPostInfo = async (id) => {
-  try {
-    const res = await fetch(
-      `https://api.slingacademy.com/v1/sample-data/blog-posts/${id}`
-    );
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log(error);
+
+export async function generateMetadata({params}){
+  const {id} = params;
+  const details = await getPostInfo(id);
+  const {title, description, photo_url } = await details.blog;
+
+  return {
+    title: title,
+    description: description,
+    keywords: description,
+    openGraph: {
+      images: photo_url,
+    },
   }
-};
+}
 
 async function BlogInformation({ params }) {
   const { id } = params;
-  const details = await getPostInfo(id);
+  const details = await getPostInfo(id) ;
   const { title, content_text, photo_url, description } = await details.blog;
   return (
     <>
@@ -26,3 +30,4 @@ async function BlogInformation({ params }) {
 }
 
 export default BlogInformation;
+

@@ -1,20 +1,11 @@
 import { Suspense } from "react";
 import BlogItem from "./blogitem";
 import Loading from "./loading";
-import Link from "next/link";
+import { getPosts } from "../libs/getPosts";
 
 
-const getPosts = async () => {
-  try {
-    const res = await fetch(
-      `https://api.slingacademy.com/v1/sample-data/blog-posts?limit=30`
-    );
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+
 
 async function Blogs() {
   const posts = await getPosts();
@@ -32,12 +23,6 @@ async function Blogs() {
           )}
           
         </div>
-        {/* <div className="flex gap-3 mt-5 text-xl justify-center">
-          <Link href={'/blogs' }>Next Page {`>>`} </Link>
-          ||
-          <Link href={'/blogs' }>{`>>`} Previous Page  </Link>
-           
-        </div> */}
       </Suspense>
     </>
   );
