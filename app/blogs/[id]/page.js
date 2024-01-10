@@ -1,10 +1,10 @@
 import { getPostInfo } from "@/app/libs/getPostInfo";
+import { getPosts } from "@/app/libs/getPosts";
 
-
-export async function generateMetadata({params}){
-  const {id} = params;
+export async function generateMetadata({ params }) {
+  const { id } = params;
   const details = await getPostInfo(id);
-  const {title, description, photo_url } = await details.blog;
+  const { title, description, photo_url } = await details.blog;
 
   return {
     title: title,
@@ -13,12 +13,19 @@ export async function generateMetadata({params}){
     openGraph: {
       images: photo_url,
     },
-  }
+  };
+}
+export async function generateStaticParams() {
+  const posts = await getPosts();
+
+  return posts.blogs.map((post) => ({
+    id: post.id.toString(),
+  }));
 }
 
 async function BlogInformation({ params }) {
   const { id } = params;
-  const details = await getPostInfo(id) ;
+  const details = await getPostInfo(id);
   const { title, content_text, photo_url, description } = await details.blog;
   return (
     <>
@@ -30,4 +37,3 @@ async function BlogInformation({ params }) {
 }
 
 export default BlogInformation;
-
